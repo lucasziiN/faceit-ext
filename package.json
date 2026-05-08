@@ -1,0 +1,25 @@
+{
+  "name": "faceit-ext",
+  "version": "1.0.0",
+  "description": "FACEIT Match Room Overlay Extension",
+  "main": "content.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasziiN/faceit-ext.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/lucasziiN/faceit-ext/issues"
+  },
+  "homepage": "https://github.com/lucasziiN/faceit-ext#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.1.42",
+    "typescript": "^6.0.3"
+  }
+}
