@@ -1,0 +1,14 @@
+{
+  "include": ["src/content.ts"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "esnext",
+    "types": ["chrome"],
+    "sourceMap": true,
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  }
+}
