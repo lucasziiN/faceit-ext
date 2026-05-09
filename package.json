@@ -5,7 +5,7 @@
   "main": "content.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p tsconfig.content.json && tsc -p tsconfig.service_worker.json"
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,8 @@
   "homepage": "https://github.com/lucasziiN/faceit-ext#readme",
   "devDependencies": {
     "@types/chrome": "^0.1.42",
+    "dotenv": "^17.4.2",
+    "esbuild": "^0.28.0",
     "typescript": "^6.0.3"
   }
 }
