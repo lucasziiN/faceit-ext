@@ -44,9 +44,9 @@ function getBaiterTrait(entryRate: number, kd: number): string | null {
 }
 
 function getClutchTrait(win1v1: number, win1v2: number): string | null {
-    if (win1v1 > 0.55) return 'excellent clutch player — wins 1vX situations at a high rate'
-    if (win1v1 > 0.50) return 'decent clutch player'
-    if (win1v1 < 0.40) return 'struggles in clutch situations'
+    if (win1v1 >= 0.44) return 'excellent clutch player — wins 1vX situations at a high rate'
+    if (win1v1 >= 0.41) return 'decent clutch player'
+    if (win1v1 < 0.35) return 'struggles in clutch situations'
     return null
 }
 

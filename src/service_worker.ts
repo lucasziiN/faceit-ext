@@ -1,4 +1,7 @@
 import { getMatchDetails, getPlayerStatsById} from './faceit-api'
+import { detectArchetype } from './archetypes'
+
+let lastMatchId: string | null = null
 
 function handleMessages(message, sender, sendresponse) {
     if (message.type === 'MATCH_ROOM_DETECTED') {
@@ -9,9 +12,11 @@ function handleMessages(message, sender, sendresponse) {
 
 chrome.runtime.onMessage.addListener(handleMessages)
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+    
     if (details.url.includes('/cs2/room/')) {
         const matchId = details.url.split('/').pop()
-        if (matchId){
+        if (matchId && matchId !== lastMatchId){
+            lastMatchId = matchId
             handleMatchRoom(matchId)
         }
     }
@@ -24,5 +29,6 @@ async function handleMatchRoom(matchId: string){
     const allPlayers = [...team1, ...team2]
     
     const results = await Promise.all(allPlayers.map(player => getPlayerStatsById(player.player_id)))
-    console.log(results)
+    const archetypes = results.map(playerStats => detectArchetype(playerStats))
+    console.log(archetypes)
 }
