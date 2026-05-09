@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "types": ["chrome"],
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}

@@ -20,9 +20,9 @@ export async function getPlayerByNickname(nickname: string) {
     }
 }
 
-export async function getPlayerStatsById(player_id: string) {
+export async function getPlayerStatsById(playerId: string) {
     try {
-        const response = await fetch(`https://open.faceit.com/data/v4/players/${player_id}/stats/cs2`, {
+        const response = await fetch(`https://open.faceit.com/data/v4/players/${playerId}/stats/cs2`, {
             headers: {
                 'Authorization': `Bearer ${FACEIT_API_KEY}`
             }
@@ -40,9 +40,9 @@ export async function getPlayerStatsById(player_id: string) {
 }
 
 
-export async function getPlayerHistory(player_id: string) {
+export async function getPlayerHistory(playerId: string) {
     try {
-        const response = await fetch(`https://open.faceit.com/data/v4/players/${player_id}/history`, {
+        const response = await fetch(`https://open.faceit.com/data/v4/players/${playerId}/history`, {
             headers: {
                 'Authorization': `Bearer ${FACEIT_API_KEY}`
             }
@@ -59,9 +59,9 @@ export async function getPlayerHistory(player_id: string) {
     }
 }
 
-export async function getMatchStats(match_id: string) {
+export async function getMatchStats(matchId: string) {
     try {
-        const response = await fetch(`https://open.faceit.com/data/v4/matches/${match_id}/stats`, {
+        const response = await fetch(`https://open.faceit.com/data/v4/matches/${matchId}/stats`, {
             headers: {
                 'Authorization': `Bearer ${FACEIT_API_KEY}`
             }
@@ -78,9 +78,9 @@ export async function getMatchStats(match_id: string) {
     }
 }
 
-export async function getMatchDetails(match_id: string) {
+export async function getMatchDetails(matchId: string) {
     try {
-        const response = await fetch(`https://open.faceit.com/data/v4/matches/${match_id}`, {
+        const response = await fetch(`https://open.faceit.com/data/v4/matches/${matchId}`, {
             headers: {
                 'Authorization': `Bearer ${FACEIT_API_KEY}`
             }
