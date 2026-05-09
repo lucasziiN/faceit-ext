@@ -1,22 +1,8 @@
-declare const process: { env: { FACEIT_API_KEY: string } }
-console.log("service worker started")
-async function getData() {
-    try {
-        const FACEIT_API_KEY = process.env.FACEIT_API_KEY
-        const response = await fetch('https://open.faceit.com/data/v4/players?nickname=lucasziiN', {
-            headers: {
-                'Authorization': `Bearer ${FACEIT_API_KEY}`
-            }
-        })
+import { getPlayerByNickname, getPlayerStatsById } from './faceit-api'
 
-        // Check if response was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data = await response.json()
-        console.log(data)
-    } catch (error) {
-        console.error('fetch error: ', error)
-    }
+async function main(){
+    const player_id = await getPlayerByNickname("lucasziiN")
+    const stats = await getPlayerStatsById(player_id)
+    console.log(stats)
 }
-getData()
+main()
