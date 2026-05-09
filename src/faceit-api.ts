@@ -1,9 +1,10 @@
+import { FACEIT_API } from "./constants"
 declare const process: { env: { FACEIT_API_KEY: string } }
 const FACEIT_API_KEY = process.env.FACEIT_API_KEY
 
-export async function getPlayerByNickname(nickname: string) {
+async function faceitFetch(url: string) {
     try {
-        const response = await fetch(`https://open.faceit.com/data/v4/players?nickname=${nickname}`, {
+        const response = await fetch(url, {
             headers: {
                 'Authorization': `Bearer ${FACEIT_API_KEY}`
             }
@@ -14,85 +15,28 @@ export async function getPlayerByNickname(nickname: string) {
             throw new Error(`HTTP error! status: ${response.status}`)
         }
         const data = await response.json()
-        return data.player_id
+        return data
     } catch (error) {
         console.error('fetch error: ', error)
     }
+}
+
+export async function getPlayerByNickname(nickname: string) {
+    return await faceitFetch(FACEIT_API.player(nickname))
 }
 
 export async function getPlayerStatsById(playerId: string) {
-    try {
-        const response = await fetch(`https://open.faceit.com/data/v4/players/${playerId}/stats/cs2`, {
-            headers: {
-                'Authorization': `Bearer ${FACEIT_API_KEY}`
-            }
-        })
-
-        // Check if response was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data = await response.json()
-        return data
-    } catch (error) {
-        console.error('fetch error: ', error)
-    }
+    return await faceitFetch(FACEIT_API.playerStats(playerId))
 }
 
-
 export async function getPlayerHistory(playerId: string) {
-    try {
-        const response = await fetch(`https://open.faceit.com/data/v4/players/${playerId}/history`, {
-            headers: {
-                'Authorization': `Bearer ${FACEIT_API_KEY}`
-            }
-        })
-
-        // Check if response was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data = await response.json()
-        return data
-    } catch (error) {
-        console.error('fetch error: ', error)
-    }
+    return await faceitFetch(FACEIT_API.playerHistory(playerId))
 }
 
 export async function getMatchStats(matchId: string) {
-    try {
-        const response = await fetch(`https://open.faceit.com/data/v4/matches/${matchId}/stats`, {
-            headers: {
-                'Authorization': `Bearer ${FACEIT_API_KEY}`
-            }
-        })
-
-        // Check if response was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data = await response.json()
-        return data
-    } catch (error) {
-        console.error('fetch error: ', error)
-    }
+    return await faceitFetch(FACEIT_API.matchStats(matchId))
 }
 
 export async function getMatchDetails(matchId: string) {
-    try {
-        const response = await fetch(`https://open.faceit.com/data/v4/matches/${matchId}`, {
-            headers: {
-                'Authorization': `Bearer ${FACEIT_API_KEY}`
-            }
-        })
-
-        // Check if response was successful
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-        const data = await response.json()
-        return data
-    } catch (error) {
-        console.error('fetch error: ', error)
-    }
+    return await faceitFetch(FACEIT_API.matchDetails(matchId))
 }
