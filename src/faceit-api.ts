@@ -21,8 +21,12 @@ async function faceitFetch(url: string) {
     }
 }
 
-export async function getPlayerProfile(nickname: string) {
-    return await faceitFetch(FACEIT_API.player(nickname))
+export async function getPlayerProfileByNickname(nickname: string) {
+    return await faceitFetch(FACEIT_API.playerByNickname(nickname))
+}
+
+export async function getPlayerProfileById(player_id: string) {
+    return await faceitFetch(FACEIT_API.playerById('test123'))
 }
 
 export async function getPlayerStatsById(playerId: string) {
