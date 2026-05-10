@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 await esbuild.build({
-    entryPoints: ['src/content.ts', 'src/service_worker.ts'],
+    entryPoints: ['src/content.ts', 'src/service_worker.ts', 'src/content.css', 'src/popup.ts'],
     bundle: true,
     outdir: 'dist',
     platform: 'browser',

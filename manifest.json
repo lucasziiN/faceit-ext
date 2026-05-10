@@ -10,8 +10,8 @@
     "content_scripts": [
         {
             "matches": ["https://www.faceit.com/*"],
-            "js": ["dist/content.js"]
-        
+            "js": ["dist/content.js"],
+            "css": ["dist/content.css"]
         }
     ],
     "background": {

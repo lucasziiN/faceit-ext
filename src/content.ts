@@ -8,47 +8,74 @@ interface PlayerCard {
 
 const PANEL_ID = 'faceit-ext-panel'
 
+let cachedPlayers: PlayerCard[] = []
+
 chrome.runtime.onMessage.addListener((message) => {
     if (message.type === 'PLAYERS_ANALYSED') {
-        renderPanel(message.players)
+        cachedPlayers = message.players
+        renderPanel()
+    }
+    if (message.type === 'SHOW_PANEL' && cachedPlayers.length > 0) {
+        renderPanel()
     }
 })
 
-function renderPanel(players: PlayerCard[]) {
+function renderPanel() {
     document.getElementById(PANEL_ID)?.remove()
 
     const panel = document.createElement('div')
     panel.id = PANEL_ID
-    panel.style.cssText = 'position:fixed;top:80px;right:20px;width:340px;max-height:80vh;overflow-y:auto;background:#1f1f1f;color:#fff;padding:12px;border:1px solid #444;border-radius:8px;z-index:99999;font-family:sans-serif;font-size:13px'
+    panel.appendChild(buildHeader())
 
-    const heading = document.createElement('h3')
-    heading.textContent = 'Match analysis'
-    panel.appendChild(heading)
-
-    for (const player of players) {
+    for (const player of cachedPlayers) {
         panel.appendChild(buildPlayerRow(player))
     }
 
     document.body.appendChild(panel)
 }
 
+function buildHeader(): HTMLElement {
+    const header = document.createElement('div')
+    header.className = 'faceit-ext-header'
+
+    const title = document.createElement('h3')
+    title.className = 'faceit-ext-title'
+    title.textContent = 'Match analysis'
+
+    const close = document.createElement('button')
+    close.className = 'faceit-ext-close'
+    close.textContent = '×'
+    close.title = 'Close'
+    close.addEventListener('click', () => document.getElementById(PANEL_ID)?.remove())
+
+    header.appendChild(title)
+    header.appendChild(close)
+    return header
+}
+
 function buildPlayerRow(player: PlayerCard): HTMLElement {
     const row = document.createElement('div')
     row.className = 'faceit-ext-row'
-    row.style.cssText = 'display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #333'
 
-    const avatar = document.createElement('img')
-    avatar.src = player.avatar
+    const avatar = document.createElement('div')
     avatar.className = 'faceit-ext-avatar'
-    avatar.style.cssText = 'width:32px;height:32px;border-radius:50%;flex-shrink:0'
+    if (player.avatar) {
+        const img = document.createElement('img')
+        img.src = player.avatar
+        avatar.appendChild(img)
+    }
 
     const info = document.createElement('div')
     info.className = 'faceit-ext-info'
-    info.style.cssText = 'flex:1;min-width:0'
 
     const name = document.createElement('div')
     name.className = 'faceit-ext-name'
-    name.textContent = `${player.nickname} (lvl ${player.skillLevel})`
+    name.textContent = player.nickname
+
+    const level = document.createElement('span')
+    level.className = 'faceit-ext-level'
+    level.textContent = player.skillLevel === 0 ? 'unranked' : `lvl ${player.skillLevel}`
+    name.appendChild(level)
 
     const summary = document.createElement('div')
     summary.className = 'faceit-ext-summary'
