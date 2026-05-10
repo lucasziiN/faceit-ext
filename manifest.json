@@ -6,7 +6,7 @@
     "action": {
         "default_popup": "faceit_extension.html"
     },
-
+    "permissions": ["tabs", "webNavigation"],
     "content_scripts": [
         {
             "matches": ["https://www.faceit.com/*"],
@@ -18,5 +18,6 @@
         "service_worker": "dist/service_worker.js",
         "type": "module"
 
-    }   
+    },
+    "host_permissions": ["https://open.faceit.com/*"]
 }
