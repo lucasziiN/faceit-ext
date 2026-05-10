@@ -1,3 +1,8 @@
+// The side panel is the main UI. It runs in its own page context
+// (sidepanel.html), separate from both the service worker and the
+// content script. It reads match data from chrome.storage.local and
+// re-renders when that data changes.
+
 interface PlayerCard {
     nickname: string
     skillLevel: number
@@ -20,6 +25,10 @@ interface MatchData {
     team2: Team
 }
 
+// Each tab in the side panel is a "view". Adding a new section is just:
+// 1. Write a function that takes (root, data) and builds DOM into root
+// 2. Add an entry to this views array
+// The shell handles routing, active-state styling, and re-renders.
 interface View {
     id: string
     label: string
@@ -38,11 +47,17 @@ let cachedData: MatchData | null = null
 
 async function init() {
     renderTabs()
+
+    // Initial fetch from storage when the side panel first opens. After
+    // this, the onChanged listener below keeps us in sync.
     const { matchData } = await chrome.storage.local.get('matchData')
     cachedData = matchData ?? null
     renderStatus()
     renderActiveView()
 
+    // Live updates: when the service worker writes new match data, the
+    // side panel re-renders automatically without the user having to
+    // close and reopen it.
     chrome.storage.onChanged.addListener((changes) => {
         if (changes.matchData) {
             cachedData = changes.matchData.newValue ?? null
@@ -98,6 +113,9 @@ function renderOverview(root: HTMLElement, data: MatchData | null) {
     root.appendChild(buildTeamSection(data.team2))
 }
 
+// Higher-order function — takes a description and returns a render
+// function. Used so the placeholder views in the views array can each
+// have their own message without duplicating the rendering logic.
 function renderComingSoon(description: string) {
     return (root: HTMLElement) => {
         const wrapper = document.createElement('div')
@@ -161,6 +179,10 @@ function buildPlayerRow(player: PlayerCard): HTMLElement {
     const row = document.createElement('div')
     row.className = 'player'
 
+    // Avatar wrapper — if the player has an avatar URL we layer an img
+    // on top, otherwise the CSS background SVG silhouette shows through.
+    // Using textContent / createElement instead of innerHTML to avoid
+    // XSS risk: nicknames are user-controlled input.
     const avatar = document.createElement('div')
     avatar.className = 'avatar'
     if (player.avatar) {
@@ -179,6 +201,8 @@ function buildPlayerRow(player: PlayerCard): HTMLElement {
     name.className = 'player-name'
     name.textContent = player.nickname
 
+    // Skill level class drives the badge colour via CSS — see lvl-1..10
+    // rules in sidepanel.css. lvl-0 = unranked, neutral grey.
     const level = document.createElement('span')
     level.className = 'player-level lvl-' + (player.skillLevel || 0)
     level.textContent = player.skillLevel === 0 ? 'unranked' : String(player.skillLevel)
