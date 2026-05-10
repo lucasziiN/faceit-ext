@@ -1,0 +1,294 @@
+:root {
+    --bg: #0f0f10;
+    --surface: #18181b;
+    --surface-2: #1f1f24;
+    --border: #2a2a30;
+    --border-hover: #3a3a42;
+    --text: #ececef;
+    --text-muted: #8b8b94;
+    --text-dim: #5c5c66;
+    --accent: #ff5500;
+    --accent-hover: #ff6a1f;
+    --accent-glow: rgba(255, 85, 0, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ===== Top bar ===== */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-mark {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.brand-name {
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+}
+
+.status {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* ===== Tabs ===== */
+
+.tabs {
+    display: flex;
+    gap: 2px;
+    padding: 6px 8px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+}
+
+.tab:hover { color: var(--text); background: var(--surface-2); }
+
+.tab-active {
+    color: var(--accent);
+    background: var(--accent-glow);
+}
+
+/* ===== Main content ===== */
+
+.main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 16px 24px;
+}
+
+.main::-webkit-scrollbar { width: 8px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.main::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+/* ===== Empty / coming soon ===== */
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-text { font-size: 13px; max-width: 240px; }
+
+.soon {
+    padding: 28px 20px;
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+}
+
+.soon-tag {
+    display: inline-block;
+    background: var(--accent-glow);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.soon-desc {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 260px;
+    margin: 0 auto;
+}
+
+/* ===== Team section ===== */
+
+.team {
+    margin-bottom: 4px;
+}
+
+.team-label {
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 8px 0 6px;
+}
+
+.vs-divider {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 14px 0;
+    position: relative;
+}
+
+.vs-divider::before,
+.vs-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 42%;
+    height: 1px;
+    background: var(--border);
+}
+
+.vs-divider::before { left: 0; }
+.vs-divider::after { right: 0; }
+
+/* ===== Player row ===== */
+
+.player {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.12s;
+}
+
+.player:hover { background: var(--surface); }
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    background-color: var(--surface-2);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='9' r='3.5' fill='%23555'/><path d='M5 20c0-3.5 3-6 7-6s7 2.5 7 6' fill='%23555'/></svg>");
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.player-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.player-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.player-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.player-level {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    color: #fff;
+    letter-spacing: 0.3px;
+}
+
+/* FACEIT skill level colours */
+.lvl-0 { background: #4a4a52; color: var(--text-muted); }
+.lvl-1, .lvl-2, .lvl-3 { background: #4caf50; }
+.lvl-4, .lvl-5, .lvl-6 { background: #f9a825; }
+.lvl-7, .lvl-8 { background: #ff7a1c; }
+.lvl-9 { background: #ff3d00; }
+.lvl-10 { background: linear-gradient(135deg, #ff1744, #d50000); }
+
+.player-elo {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.player-summary {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}

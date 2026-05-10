@@ -26,7 +26,7 @@ export async function getPlayerProfileByNickname(nickname: string) {
 }
 
 export async function getPlayerProfileById(player_id: string) {
-    return await faceitFetch(FACEIT_API.playerById('test123'))
+    return await faceitFetch(FACEIT_API.playerById(player_id))
 }
 
 export async function getPlayerStatsById(playerId: string) {

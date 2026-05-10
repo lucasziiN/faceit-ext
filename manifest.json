@@ -4,9 +4,12 @@
     "version": "1.0",
     "manifest_version": 3,
     "action": {
-        "default_popup": "faceit_extension.html"
+        "default_title": "FACEIT Analysis"
     },
-    "permissions": ["tabs", "webNavigation"],
+    "side_panel": {
+        "default_path": "sidepanel.html"
+    },
+    "permissions": ["tabs", "webNavigation", "storage", "sidePanel"],
     "content_scripts": [
         {
             "matches": ["https://www.faceit.com/*"],
@@ -17,7 +20,6 @@
     "background": {
         "service_worker": "dist/service_worker.js",
         "type": "module"
-
     },
     "host_permissions": ["https://open.faceit.com/*"]
 }
