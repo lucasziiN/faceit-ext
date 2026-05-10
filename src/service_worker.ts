@@ -12,23 +12,33 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
             lastMatchId = matchId
             handleMatchRoom(matchId, details.tabId)
         }
+    } else if (lastMatchId) {
+        lastMatchId = null
+        chrome.tabs.sendMessage(details.tabId, { type: 'HIDE_PANEL' })
     }
 })
 
 async function handleMatchRoom(matchId: string, tabId: number) {
     const matchDetails = await getMatchDetails(matchId)
-    const team1 = matchDetails.teams.faction1.roster
-    const team2 = matchDetails.teams.faction2.roster
-    const allPlayers = [...team1, ...team2]
+    const faction1 = matchDetails.teams.faction1
+    const faction2 = matchDetails.teams.faction2
 
-    const results = await Promise.all(allPlayers.map(p => getPlayerStatsById(p.player_id)))
+    const team1Cards = await buildTeam(faction1.roster)
+    const team2Cards = await buildTeam(faction2.roster)
 
-    const players = results.map((playerStats, i) => ({
-        nickname: allPlayers[i].nickname,
-        skillLevel: allPlayers[i].game_skill_level,
-        avatar: allPlayers[i].avatar,
+    chrome.tabs.sendMessage(tabId, {
+        type: 'PLAYERS_ANALYSED',
+        team1: { name: faction1.name, players: team1Cards },
+        team2: { name: faction2.name, players: team2Cards }
+    })
+}
+
+async function buildTeam(roster: any[]) {
+    const stats = await Promise.all(roster.map(p => getPlayerStatsById(p.player_id)))
+    return stats.map((playerStats, i) => ({
+        nickname: roster[i].nickname,
+        skillLevel: roster[i].game_skill_level,
+        avatar: roster[i].avatar,
         ...detectArchetype(playerStats)
     }))
-
-    chrome.tabs.sendMessage(tabId, { type: 'PLAYERS_ANALYSED', players })
 }

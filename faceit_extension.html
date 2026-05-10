@@ -27,14 +27,26 @@
         cursor: pointer;
         font-size: 13px;
       }
-      button:hover {
+      button:hover:not(:disabled) {
         background: #ff6a1f;
+      }
+      button:disabled {
+        background: #333;
+        color: #666;
+        cursor: not-allowed;
+      }
+      #status {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #888;
+        text-align: center;
       }
     </style>
   </head>
   <body>
     <h1>Faceit Extension</h1>
     <button id="show-panel">Show match analysis</button>
+    <div id="status"></div>
     <script src="dist/popup.js"></script>
   </body>
 </html>
