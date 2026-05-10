@@ -1,8 +1,13 @@
-const currentUrl = window.location.href;
-function extractMatchIdFromUrl(url: string): string | undefined {
-    if (url.includes('/cs2/room/')) {
-        const urlArray: string[] = url.split('/')
-        // get last element
-        return urlArray.pop()
-    }
+interface PlayerCard {
+    nickname: string
+    skillLevel: number
+    avatar: string
+    traits: string[]
+    summary: string
 }
+
+chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === 'PLAYERS_ANALYSED') {
+        console.log('content script received players:', message.players)
+    }
+})
