@@ -3,14 +3,6 @@ import { detectArchetype } from './archetypes'
 
 let lastMatchId: string | null = null
 
-function handleMessages(message) {
-    if (message.type === 'MATCH_ROOM_DETECTED') {
-        getMatchDetails(message.matchId).then(data => console.log(data))
-    }
-    return true
-}
-
-chrome.runtime.onMessage.addListener(handleMessages)
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
     
     if (details.url.includes('/cs2/room/')) {
