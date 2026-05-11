@@ -1,7 +1,17 @@
 import { FACEIT_API } from "./constants"
+
+// process.env.FACEIT_API_KEY is replaced at build time by esbuild's
+// `define` option (see build.js). Without `declare const process` here
+// TypeScript would complain since `process` only exists in Node, not
+// in a browser context — but the actual value gets baked in before
+// the code runs.
 declare const process: { env: { FACEIT_API_KEY: string } }
 const FACEIT_API_KEY = process.env.FACEIT_API_KEY
 
+// Single fetch wrapper so every call gets the auth header and the same
+// error handling. Returns undefined on failure rather than throwing —
+// the callers use Promise.all and we don't want one bad player to
+// abort all 10. The optional chaining downstream handles missing data.
 async function faceitFetch(url: string) {
     try {
         const response = await fetch(url, {
@@ -10,7 +20,6 @@ async function faceitFetch(url: string) {
             }
         })
 
-        // Check if response was successful
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
         }

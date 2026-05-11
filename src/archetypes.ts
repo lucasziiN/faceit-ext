@@ -1,3 +1,16 @@
+// Archetype detection — turns FACEIT lifetime stats into a short
+// coaching-style summary describing how a player tends to play.
+//
+// Architecture: each "trait" is a small focused function returning
+// either a human-readable string or null. detectArchetype runs them
+// all and joins whatever non-null traits came back. Adding a new
+// trait = write a new function + push it into the traits array.
+//
+// Threshold reasoning: thresholds are calibrated against real FACEIT
+// data (50-player sample), not picked from intuition. See issue #6
+// for ongoing tuning. A threshold that flags everyone is useless,
+// so the goal is each trait fires for ~10-30% of the population.
+
 interface PlayerLifetime {
     'Entry Rate': string
     'Entry Success Rate': string
@@ -21,6 +34,8 @@ interface ArchetypeResult {
     summary: string
 }
 
+// FACEIT API returns all stat values as strings. Wrapping parseFloat
+// here so callers don't have to remember to convert each one.
 function parseFloat2(val: string): number {
     return parseFloat(val)
 }
@@ -38,11 +53,15 @@ function getEntryTrait(entryRate: number, entrySuccess: number): string | null {
     return null
 }
 
+// Baiter pattern: rarely opens rounds (so others die first) but still
+// gets kills. Combo of low entry rate + high K/D is the signature.
 function getBaiterTrait(entryRate: number, kd: number): string | null {
     if (entryRate < 0.12 && kd > 1.3) return 'baiter tendencies — rarely opens rounds but racks up kills'
     return null
 }
 
+// Clutch thresholds calibrated from a 50-player sample where mean 1v1
+// win rate was 0.38 with SD 0.03. See PR #7 for the data and rationale.
 function getClutchTrait(win1v1: number, win1v2: number): string | null {
     if (win1v1 >= 0.44) return 'excellent clutch player — wins 1vX situations at a high rate'
     if (win1v1 >= 0.41) return 'decent clutch player'
@@ -84,6 +103,8 @@ export function detectArchetype(stats: PlayerStats): ArchetypeResult {
     if (awp) traits.push(awp)
     if (support) traits.push(support)
 
+    // No traits firing means stats are all middle-of-the-pack — the
+    // honest output is to say so rather than fabricating something.
     const summary = traits.length > 0
         ? traits.join('. ')
         : 'no strong tendencies detected'
